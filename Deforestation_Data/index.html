@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIG - Data Sonification</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="reels-container">
+        <div class="main-interface">
+            <!-- Left Panel -->
+            <div class="side-panel">
+                <div class="data-card" data-metric="global-metrics">
+                    <h3>GLOBAL METRICS</h3>
+                    <div class="data-value">2.47M</div>
+                    <div class="data-unit">Hectares Lost</div>
+                </div>
+                
+                <div class="data-card" data-metric="annual-change">
+                    <h3>ANNUAL CHANGE</h3>
+                    <div class="data-value">+12.3%</div>
+                    <div class="data-unit">Year over Year</div>
+                    <canvas id="annual-change-graph" class="graph-canvas"></canvas>
+                </div>
+                
+                <div class="data-card" data-metric="carbon-impact">
+                    <h3>CARBON IMPACT</h3>
+                    <div class="data-value">1.2GT</div>
+                    <div class="data-unit">CO2 Equivalent</div>
+                </div>
+                
+                <div class="data-title">Regional Deforestation Data</div>
+                <div class="data-display">
+                    <div class="controls">
+                        <select id="region-select" class="region-select korean-text">
+                            <option value="All Regions">전체 지역</option>
+                        </select>
+                    </div>
+                    <div class="year-container">
+                        <div class="year-label">YEAR</div>
+                        <div id="current-year" class="year-value">-</div>
+                    </div>
+                    <div class="loss-bar">
+                        <div id="loss-fill"></div>
+                    </div>
+                    <div class="loss-text">LOSS: <span id="current-loss">-</span> ha</div>
+                </div>
+            </div>
+            
+            <!-- Center Panel -->
+            <div class="main-content">
+                <div class="section-title">한국의 산림파괴와 생물다양성 감소</div>
+                <div class="images">
+                    <div class="card">
+                        <img src="images/image1.png" alt="Image 1">
+                    </div>
+                    <div class="card">
+                        <img src="images/image2.png" alt="Image 2">
+                    </div>
+                    <div class="card">
+                        <img src="images/image3.png" alt="Image 3">
+                    </div>
+                    <div class="card">
+                        <img src="images/image4.png" alt="Image 4">
+                    </div>
+                    <button id="sonify-button" class="sonify-button" aria-label="Play/Stop Sonification">
+                        <svg class="play-icon" viewBox="0 0 24 24" width="40" height="40">
+                            <path class="play-path" d="M8 6v12l10-6z"/>
+                            <path class="stop-path" d="M8 8h8v8H8z"/>
+                        </svg>
+                    </button>
+                    <div class="grid-overlay"></div>
+                </div>
+            </div>
+            
+            <!-- Right Panel -->
+            <div class="side-panel">
+                <div class="data-card" data-metric="soil">
+                    <h3>SOIL COMPOSITION</h3>
+                    <div class="data-value">43.2%</div>
+                    <div class="data-unit">Organic Matter</div>
+                    <div class="data-bar">
+                        <div class="bar-fill" style="width: 43.2%"></div>
+                    </div>
+                </div>
+                
+                <div class="data-card" data-metric="biodiversity">
+                    <h3>BIODIVERSITY</h3>
+                    <div class="data-value">-28.9%</div>
+                    <div class="data-unit">Species Decline</div>
+                    <div class="data-bar">
+                        <div class="bar-fill" style="width: 28.9%"></div>
+                    </div>
+                    <canvas id="biodiversity-graph" class="graph-canvas"></canvas>
+                </div>
+                
+                <div class="data-card" data-metric="temperature">
+                    <h3>TEMPERATURE</h3>
+                    <div class="data-value">+1.8°C</div>
+                    <div class="data-unit">Above Baseline</div>
+                    <div class="data-bar">
+                        <div class="bar-fill" style="width: 60%"></div>
+                    </div>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric" data-metric="density">
+                        <div class="metric-label">DENSITY</div>
+                        <div class="metric-value">847 t/ha</div>
+                    </div>
+                    <div class="metric" data-metric="biomass">
+                        <div class="metric-label">BIOMASS</div>
+                        <div class="metric-value">234 Mg</div>
+                    </div>
+                    <div class="metric" data-metric="soilC">
+                        <div class="metric-label">SOIL C</div>
+                        <div class="metric-value">156 t/ha</div>
+                    </div>
+                    <div class="metric" data-metric="pH">
+                        <div class="metric-label">pH</div>
+                        <div class="metric-value">6.4</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <canvas id="earth-bg"></canvas>
+        <canvas id="visualizer"></canvas>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/Flip.min.js"></script>
+    <script src="earth.js"></script>
+    <script src="audio.js"></script>
+    <script src="sonification.js"></script>
+    <script src="script.js"></script>
+    <script src="graphs.js"></script>
+</body>
+</html>
